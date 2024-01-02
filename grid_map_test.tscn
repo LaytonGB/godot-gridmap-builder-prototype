@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://bv5unpvojacm"]
+
+[ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_1jxdo"]
+[ext_resource type="MeshLibrary" uid="uid://brjsqliscr2bt" path="res://assets/meshes/mesh_lib.tres" id="2_eqkhv"]
+[ext_resource type="Script" path="res://Camera3D.gd" id="2_j8s3l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1lio2"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ubwr8"]
+material = SubResource("StandardMaterial3D_1lio2")
+radius = 0.1
+height = 0.2
+
+[node name="GridMapTest" type="Node3D"]
+
+[node name="GridMap" parent="." instance=ExtResource("1_1jxdo")]
+mesh_library = ExtResource("2_eqkhv")
+cell_size = Vector3(1, 1, 1)
+cell_center_y = false
+collision_layer = 1
+collision_mask = 1
+data = {
+"cells": PackedInt32Array(65535, 65535, 2, 0, 65535, 2, 0, 0, 2, 65535, 0, 2, 0, 1, 0, 65535, 1, 1, 1, 1, 3, 1, 0, 3, 1, 65535, 3, 65534, 65535, 4, 65534, 0, 4, 65534, 1, 4, 65533, 65535, 3, 65533, 0, 3, 65533, 1, 3)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.89255, 5.37911)
+script = ExtResource("2_j8s3l")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.989093, 0.109176, -0.0988702, 0, 0.671255, 0.741226, 0.147292, -0.733142, 0.663934, -11.5573, 0, 6.54426)
+
+[node name="PointerVisual" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5093)
+visible = false
+layers = 2
+mesh = SubResource("SphereMesh_ubwr8")

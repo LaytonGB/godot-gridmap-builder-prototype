@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bj43ivopg0ui1"]
+
+[ext_resource type="Texture2D" uid="uid://cdvfkwcphf85v" path="res://assets/texture_09.png" id="1_qtw5f"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_lnrbl"]
+size = Vector3(2, 2, 4)
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_w20rx"]
+albedo_texture = ExtResource("1_qtw5f")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_m4v8i"]
+size = Vector3(1.8, 1.8, 3.8)
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_van4h"]
+albedo_texture = ExtResource("1_qtw5f")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_egmcp"]
+size = Vector3(1, 1.5, 4)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="Room" type="CSGMesh3D" parent="CSGCombiner3D"]
+mesh = SubResource("BoxMesh_lnrbl")
+material = SubResource("ORMMaterial3D_w20rx")
+
+[node name="RoomHollow" type="CSGMesh3D" parent="CSGCombiner3D/Room"]
+operation = 2
+mesh = SubResource("BoxMesh_m4v8i")
+material = SubResource("ORMMaterial3D_van4h")
+
+[node name="Door" type="CSGMesh3D" parent="CSGCombiner3D/Room"]
+operation = 2
+mesh = SubResource("BoxMesh_egmcp")
+material = SubResource("ORMMaterial3D_van4h")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGCombiner3D/Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71034, 0)
+light_energy = 2.371
+light_indirect_energy = 0.543
+light_size = 0.381

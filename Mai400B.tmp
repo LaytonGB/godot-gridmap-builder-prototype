@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjse6qhn7s30n"]
+
+[ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_aqv8d"]
+[ext_resource type="MeshLibrary" uid="uid://c4b68mobfrks2" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
+[ext_resource type="Script" path="res://fps_cam.gd" id="3_g5ln3"]
+
+[node name="Main" type="Node3D"]
+
+[node name="GridMap" parent="." instance=ExtResource("1_aqv8d")]
+mesh_library = ExtResource("2_urava")
+cell_size = Vector3(1, 2, 1)
+cell_center_x = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(0, 0, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+script = ExtResource("3_g5ln3")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]

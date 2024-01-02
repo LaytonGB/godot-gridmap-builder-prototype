@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dcpbr14633qc5"
+path="res://.godot/imported/wood-structure.obj-15be231df80dd95fb6a87b413b536660.mesh"
+
+[deps]
+
+files=["res://.godot/imported/wood-structure.obj-15be231df80dd95fb6a87b413b536660.mesh"]
+
+source_file="res://assets/dungeon_objects/wood-structure.obj"
+dest_files=["res://.godot/imported/wood-structure.obj-15be231df80dd95fb6a87b413b536660.mesh", "res://.godot/imported/wood-structure.obj-15be231df80dd95fb6a87b413b536660.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

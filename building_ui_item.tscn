@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgm54n4f1ajx8"]
+
+[ext_resource type="Script" path="res://ItemButton.gd" id="1_3lgv8"]
+[ext_resource type="Texture2D" uid="uid://cvt7t7g2fyxsx" path="res://block_image_texture.tres" id="2_nfuym"]
+
+[sub_resource type="Theme" id="Theme_remxl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qj5n"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+
+[node name="BuildingItem" type="PanelContainer"]
+theme = SubResource("Theme_remxl")
+theme_override_styles/panel = SubResource("StyleBoxFlat_4qj5n")
+script = ExtResource("1_3lgv8")
+
+[node name="ItemContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ItemContainer"]
+layout_mode = 2
+texture = ExtResource("2_nfuym")
+
+[node name="Label" type="Label" parent="ItemContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Example Item With Long Name"
+text_overrun_behavior = 3
+
+[connection signal="selected" from="." to="." method="_on_selected"]

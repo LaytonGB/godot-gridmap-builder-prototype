@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://db8dsu43vs3tp"]
 
-[ext_resource type="PackedScene" uid="uid://bj43ivopg0ui1" path="res://block_mesh.tscn" id="1_8w5xm"]
+[ext_resource type="PackedScene" uid="uid://bj43ivopg0ui1" path="res://block-2.tscn" id="1_8w5xm"]
 
 [node name="MeshLib" type="Node3D"]
 

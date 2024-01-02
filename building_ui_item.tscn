@@ -1,19 +1,14 @@
 [gd_scene load_steps=5 format=3 uid="uid://dgm54n4f1ajx8"]
 
 [ext_resource type="Script" path="res://ItemButton.gd" id="1_3lgv8"]
+[ext_resource type="StyleBox" uid="uid://bojb6bmqk83xj" path="res://building_ui_item_stylebox.tres" id="1_exk5p"]
 [ext_resource type="Texture2D" uid="uid://cvt7t7g2fyxsx" path="res://block_image_texture.tres" id="2_nfuym"]
 
 [sub_resource type="Theme" id="Theme_remxl"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qj5n"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
-
 [node name="BuildingItem" type="PanelContainer"]
 theme = SubResource("Theme_remxl")
-theme_override_styles/panel = SubResource("StyleBoxFlat_4qj5n")
+theme_override_styles/panel = ExtResource("1_exk5p")
 script = ExtResource("1_3lgv8")
 
 [node name="ItemContainer" type="VBoxContainer" parent="."]

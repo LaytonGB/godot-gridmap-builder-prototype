@@ -1,12 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsvnr5cxaqeh0"]
+[gd_scene load_steps=4 format=3 uid="uid://dsvnr5cxaqeh0"]
 
 [ext_resource type="Script" path="res://building_ui.gd" id="1_7fbl6"]
+[ext_resource type="PackedScene" uid="uid://dgm54n4f1ajx8" path="res://building_ui_item.tscn" id="1_bim5x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8dwy5"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
 bg_color = Color(0.352941, 0.352941, 0.352941, 1)
 
 [node name="BuildingUi" type="MarginContainer"]
@@ -27,6 +24,14 @@ script = ExtResource("1_7fbl6")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8dwy5")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/CenterContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="ExampleItem" parent="PanelContainer/CenterContainer/HBoxContainer" instance=ExtResource("1_bim5x")]
+layout_mode = 2

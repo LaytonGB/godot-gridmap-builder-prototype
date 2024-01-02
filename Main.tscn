@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cjse6qhn7s30n"]
 
 [ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_aqv8d"]
-[ext_resource type="MeshLibrary" uid="uid://6dv8inqkfwm8" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
+[ext_resource type="MeshLibrary" uid="uid://dc3p2f7dn17ym" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
 [ext_resource type="Script" path="res://fps_cam.gd" id="3_g5ln3"]
 [ext_resource type="PackedScene" uid="uid://dsvnr5cxaqeh0" path="res://building_ui.tscn" id="4_63bwa"]
 

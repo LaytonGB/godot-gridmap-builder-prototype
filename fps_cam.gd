@@ -62,11 +62,22 @@ func _apply_movement(delta: float) -> void:
 func _show_placement_preview() -> void:
     if building_ui.selected != -1:
         var intersection_data = get_intersect_data()
-        if !intersection_data.is_empty():
+        if intersection_data.is_empty():
+            _preview_container.visible = false
+        else:
             var pos: Vector3 = intersection_data["position"]
-            pos += transform.basis.z * 0.1
+            var normal := intersection_data["normal"] as Vector3
+            pos = _shift_pos_using_selected(normal, pos)
             var coord := gridmap.local_to_map(pos)
-            var mesh := gridmap.get_item_mesh(building_ui.selected)
+            _show_preview_at_pos(coord)
+
+func _shift_pos_using_selected(normal: Vector3, pos: Vector3) -> Vector3:
+    pos += (normal * _preview_container.mesh.get_aabb().size / 2) + (normal.abs() * .1)
+    return pos
+
+func _show_preview_at_pos(pos: Vector3) -> void:
+    _preview_container.visible = true
+    _preview_container.transform.origin = pos
 
 func update_visualiser(new_pos: Vector3) -> void:
     var visualiser: MeshInstance3D = $"../ClickVisualiser"
@@ -88,10 +99,12 @@ func _on_building_ui_item_selected(id: int) -> void:
         else:
             _preview_container.mesh = gridmap.get_item_mesh(id)
     elif id != -1:
-        _preview_container = MeshInstance3D.new()
-        _preview_container.mesh = gridmap.get_item_mesh(id)
+        var mesh_node := MeshInstance3D.new()
+        mesh_node.mesh = gridmap.get_item_mesh(id)
         var material := StandardMaterial3D.new()
         material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
         material.albedo_color = Color(1, 0, 0, 0.4)
-        _preview_container.material_override = material
+        mesh_node.material_override = material
+        _preview_container = mesh_node
+        _preview_container.visible = false
         get_parent().add_child(_preview_container)

@@ -12,12 +12,14 @@ enum PanelColor {DEFAULT, HOVER}
 
 var hovered := false
 var id: int
+var is_selected := false
 
 signal selected
 
 func _ready() -> void:
     make_panel_unique()
     set_color(PanelColor.DEFAULT)
+    Globals.building_ui_item_selected.connect(_on_selected_updated)
     mouse_entered.connect(_on_mouse_entered)
     mouse_exited.connect(_on_mouse_exited)
 
@@ -35,12 +37,14 @@ func _gui_input(event) -> void:
             selected.emit()
 
 func _on_mouse_entered() -> void:
-    hovered = true
-    set_color(PanelColor.HOVER)
+    if !is_selected:
+        hovered = true
+        set_color(PanelColor.HOVER)
 
 func _on_mouse_exited() -> void:
-    hovered = false
-    set_color(PanelColor.DEFAULT)
+    if !is_selected:
+        hovered = false
+        set_color(PanelColor.DEFAULT)
 
 func make_panel_unique() -> void:
     set("theme_override_styles/panel", get("theme_override_styles/panel").duplicate())
@@ -50,3 +54,10 @@ func set_color(color: PanelColor) -> void:
 
 func _on_selected() -> void:
     Globals.emit_building_ui_item_selected(id)
+
+func _on_selected_updated(id: int) -> void:
+    is_selected = self.id == id
+    if is_selected:
+        set_color(PanelColor.HOVER)
+    else:
+        set_color(PanelColor.DEFAULT)

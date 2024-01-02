@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cjse6qhn7s30n"]
 
 [ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_aqv8d"]
-[ext_resource type="MeshLibrary" uid="uid://scael4t7ejcj" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
+[ext_resource type="MeshLibrary" uid="uid://dc3p2f7dn17ym" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
 [ext_resource type="Script" path="res://fps_cam.gd" id="3_g5ln3"]
 [ext_resource type="PackedScene" uid="uid://dsvnr5cxaqeh0" path="res://building_ui.tscn" id="4_63bwa"]
 
@@ -26,8 +26,8 @@ mesh_library = ExtResource("2_urava")
 cell_size = Vector3(1, 2, 1)
 cell_center_x = false
 cell_center_z = false
-collision_layer = 3
-collision_mask = 3
+collision_layer = 1
+collision_mask = 1
 data = {
 "cells": PackedInt32Array(0, 0, 0)
 }

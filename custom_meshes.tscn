@@ -116,6 +116,7 @@ mesh = SubResource("ArrayMesh_nfgmj")
 [node name="Geometry" type="StaticBody3D" parent="Block1"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Block1/Geometry"]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_x03eq")
 
 [node name="Click" type="StaticBody3D" parent="Block1"]

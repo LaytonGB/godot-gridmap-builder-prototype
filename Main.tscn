@@ -34,7 +34,9 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="PreviewContainer" type="Node3D" parent="Root3D"]
+[node name="PreviewContainer" type="StaticBody3D" parent="Root3D"]
+collision_layer = 0
+collision_mask = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Root3D"]
 transform = Transform3D(-0.826649, -0.255215, 0.501515, 0, 0.891236, 0.453539, -0.562718, 0.374918, -0.736739, 3.43607, 2.37368, -6.11045)

@@ -7,18 +7,25 @@ extends Camera3D
 
 var _pivot := Vector3.ZERO
 var _preview: MeshInstance3D
+var _preview_collider: Area3D
 var _preview_offset: Vector2i = Vector2i(0, 0)
 var _preview_rotation: int = 0
+var _preview_is_colliding := false
 var _last_coord: Vector3
+enum PreviewColor {GREEN, RED}
+var _preview_colors := {
+    PreviewColor.GREEN: Color(0, 1, 0, 0.4),
+    PreviewColor.RED: Color(1, 0, 0, 0.4),
+}
 
 @onready var _building_ui := $"../../BuildingUi" as BuildingUi
-@onready var _preview_container := $"../PreviewContainer" as Node3D
 @onready var _gridmap := $"../BuildingGrid" as BuildingGrid
+@onready var _preview_container := $"../PreviewContainer" as StaticBody3D
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("select"):
         var intersect_data := get_intersect_data()
-        if !intersect_data.is_empty() and _building_ui.selected != -1 and _last_coord:
+        if !intersect_data.is_empty() and _building_ui.selected != -1 and _last_coord and !_preview_is_colliding:
             _instantiate_preview()
     elif event.is_action_pressed("rotate"):
         _preview_rotation = (_preview_rotation + 1) % 4
@@ -65,6 +72,8 @@ func _show_placement_preview() -> void:
             pos = _shift_pos_using_selected(normal, pos)
             _last_coord = _gridmap.local_to_map(pos)
             _show_preview_at_coord()
+            _update_preview_collision()
+            _update_preview_color()
 
 func _shift_pos_using_selected(normal: Vector3, pos: Vector3) -> Vector3:
     var normals: Array[Vector3]
@@ -94,6 +103,13 @@ func _show_preview_at_coord() -> void:
     _preview.visible = true
     _preview.transform.origin = _last_coord
 
+func _update_preview_collision() -> void:
+    _preview_is_colliding = _preview_collider.get_overlapping_bodies().size() != 0
+
+func _update_preview_color() -> void:
+    _preview.material_override.set("albedo_color", _preview_colors.get(
+        PreviewColor.RED if _preview_is_colliding else PreviewColor.GREEN))
+
 func _instantiate_preview() -> void:
     var rotation_integer := _gridmap.get_orthogonal_index_from_basis(
         Basis(Vector3(0, 1, 0), PI * _preview_rotation / 2))
@@ -112,16 +128,28 @@ func _on_building_ui_item_selected(id: int) -> void:
             for child in _preview_container.get_children():
                 child.queue_free()
             _preview = null
+            _preview_collider = null
         else:
             _preview.mesh = _gridmap.get_item_mesh(id)
+            var shape_collider := _preview_collider.get_child(0) as CollisionShape3D
+            shape_collider.shape = _gridmap.get_item_collision_box(id)
     elif id != -1:
         var mesh_node := MeshInstance3D.new()
-        mesh_node.mesh = _gridmap.get_item_mesh(id)
+        var mesh := _gridmap.get_item_mesh(id)
+        mesh_node.mesh = mesh
         var material := StandardMaterial3D.new()
         material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-        material.albedo_color = Color(1, 0, 0, 0.4)
         mesh_node.material_override = material
+
+        var collision_area := Area3D.new()
+        var collision_shape := CollisionShape3D.new()
+        collision_shape.global_scale(Vector3(0.99, 0.99, 0.99)) # stop blocking adjacency
+        collision_shape.shape = _gridmap.get_item_collision_box(id)
+        collision_area.add_child(collision_shape)
+        mesh_node.add_child(collision_area)
+
         _preview = mesh_node
+        _preview_collider = collision_area
         _preview.visible = false
         _preview.visibility_changed.connect(_reset_preview_offset)
         _preview_container.add_child(_preview)

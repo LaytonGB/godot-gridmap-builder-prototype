@@ -24,19 +24,16 @@ class ClickData:
 var _pivot := Vector3.ZERO
 var _preview_container: MeshInstance3D
 var _preview_offset: Vector2i = Vector2i(0, 0)
+var _last_coord: Vector3
 
 @onready var building_ui := $"../../BuildingUi" as BuildingUi
 @onready var gridmap := $"../GridMap" as BuildingGrid
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("select"):
-        print(event)
         var intersect_data := get_intersect_data()
-        if !intersect_data.is_empty():
-            var click_pos := intersect_data.get("position") as Vector3
-            click_pos += transform.basis.z * 0.1
-            update_visualiser(click_pos)
-        print(intersect_data)
+        if !intersect_data.is_empty() and building_ui.selected != -1 and _last_coord:
+            _instantiate_preview()
     elif event.is_action_pressed("increase_offset_alt"):
         _preview_offset.y += 1
     elif event.is_action_pressed("decrease_offset_alt"):
@@ -77,20 +74,10 @@ func _show_placement_preview() -> void:
             var pos: Vector3 = intersection_data["position"]
             var normal := intersection_data["normal"] as Vector3
             pos = _shift_pos_using_selected(normal, pos)
-            var coord := gridmap.local_to_map(pos)
-            _show_preview_at_pos(coord)
+            _last_coord = gridmap.local_to_map(pos)
+            _show_preview_at_coord()
 
 func _shift_pos_using_selected(normal: Vector3, pos: Vector3) -> Vector3:
-    #var rotated_normal := normal.rotated(Vector3(0, 1, 0), PI / 2)
-    #if rotated_normal == normal:
-        #rotated_normal = normal.rotated(Vector3(0, 0, 1), PI / 2)
-    #var rotated_normal_abs := rotated_normal.abs()
-    #var mesh_size := _preview_container.mesh.get_aabb().size
-    #_clamp_preview_offset(rotated_normal_abs, mesh_size)
-    #pos += (normal * mesh_size / 2) + (normal.abs() * .1)
-    #pos += rotated_normal_abs * _preview_offset.x
-    #return pos
-
     var normals: Array[Vector3]
     if normal.x != 0:
         normals = [Vector3(0, 0, 1), Vector3(0, 1, 0)]
@@ -99,32 +86,25 @@ func _shift_pos_using_selected(normal: Vector3, pos: Vector3) -> Vector3:
     else:
         normals = [Vector3(0, 0, 1), Vector3(1, 0, 0)]
     var half_mesh_size := _preview_container.mesh.get_aabb().size / 2
-    _clamp_preview_offset_new(normals, half_mesh_size)
+    _clamp_preview_offset(normals, half_mesh_size)
     pos += normal * half_mesh_size # move preview center to align
     pos += normal.abs() * .1 # fix exact-grid-border issues
     pos += normals[0] * _preview_offset.x
     pos += normals[1] * _preview_offset.y
     return pos
 
-func _clamp_preview_offset_new(normals: Array[Vector3], half_mesh_size: Vector3) -> void:
+func _clamp_preview_offset(normals: Array[Vector3], half_mesh_size: Vector3) -> void:
     var floor_half_mesh := half_mesh_size.floor()
     var max_offsets := Vector2i(normals[0].dot(floor_half_mesh), normals[1].dot(floor_half_mesh))
     _preview_offset.x = clamp(_preview_offset.x, -max_offsets.x + 1, max_offsets.x)
     _preview_offset.y = clamp(_preview_offset.y, -max_offsets.y + 1, max_offsets.y)
 
-func _clamp_preview_offset(rotated_normal_abs: Vector3, mesh_size: Vector3) -> void:
-    var max_offset := rotated_normal_abs.dot((mesh_size / 2).floor())
-    _preview_offset.x = clamp(_preview_offset.x, -max_offset + 1, max_offset)
-    _preview_offset.y = clamp(_preview_offset.x, -max_offset + 1, max_offset)
-
-func _show_preview_at_pos(pos: Vector3) -> void:
+func _show_preview_at_coord() -> void:
     _preview_container.visible = true
-    _preview_container.transform.origin = pos
+    _preview_container.transform.origin = _last_coord
 
-func update_visualiser(new_pos: Vector3) -> void:
-    var visualiser: MeshInstance3D = $"../ClickVisualiser"
-    visualiser.visible = true
-    visualiser.transform.origin = new_pos
+func _instantiate_preview() -> void:
+    gridmap.set_cell_item(_last_coord, building_ui.selected)
 
 func get_intersect_data() -> Dictionary:
     var mouse_position := get_viewport().get_mouse_position()

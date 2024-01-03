@@ -21,7 +21,7 @@ height = 0.2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2141, 4)
 script = ExtResource("3_g5ln3")
 
-[node name="GridMap" parent="Root3D" instance=ExtResource("1_aqv8d")]
+[node name="BuildingGrid" parent="Root3D" instance=ExtResource("1_aqv8d")]
 mesh_library = ExtResource("2_urava")
 cell_size = Vector3(1, 1, 1)
 cell_center_x = false
@@ -33,6 +33,8 @@ data = {
 "cells": PackedInt32Array(0, 0, 0)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="PreviewContainer" type="Node3D" parent="Root3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Root3D"]
 transform = Transform3D(-0.826649, -0.255215, 0.501515, 0, 0.891236, 0.453539, -0.562718, 0.374918, -0.736739, 3.43607, 2.37368, -6.11045)
@@ -47,4 +49,4 @@ visible = false
 mesh = SubResource("SphereMesh_p3jek")
 
 [node name="BuildingUi" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("4_63bwa")]
-gridmap = NodePath("../Root3D/GridMap")
+gridmap = NodePath("../Root3D/BuildingGrid")

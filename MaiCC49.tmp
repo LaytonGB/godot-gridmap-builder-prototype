@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjse6qhn7s30n"]
+
+[ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_aqv8d"]
+[ext_resource type="MeshLibrary" uid="uid://scael4t7ejcj" path="res://assets/meshes/block_mesh_lib.tres" id="2_urava"]
+[ext_resource type="Script" path="res://fps_cam.gd" id="3_g5ln3"]
+[ext_resource type="PackedScene" uid="uid://dsvnr5cxaqeh0" path="res://building_ui.tscn" id="4_63bwa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yix5x"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_p3jek"]
+material = SubResource("StandardMaterial3D_yix5x")
+radius = 0.1
+height = 0.2
+
+[node name="RootCanvas" type="CanvasLayer"]
+
+[node name="Root3D" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Root3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2141, 4)
+script = ExtResource("3_g5ln3")
+
+[node name="GridMap" parent="Root3D" instance=ExtResource("1_aqv8d")]
+mesh_library = ExtResource("2_urava")
+cell_size = Vector3(1, 1, 1)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+collision_layer = 3
+collision_mask = 3
+data = {
+"cells": PackedInt32Array(0, 0, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Root3D"]
+transform = Transform3D(-0.826649, -0.255215, 0.501515, 0, 0.891236, 0.453539, -0.562718, 0.374918, -0.736739, 3.43607, 2.37368, -6.11045)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Root3D"]
+transform = Transform3D(0.89715, 0.215944, -0.385343, 0, 0.87236, 0.488865, 0.441725, -0.438585, 0.782638, -5, 3, 4)
+light_energy = 0.3
+
+[node name="ClickVisualiser" type="MeshInstance3D" parent="Root3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.40079)
+visible = false
+mesh = SubResource("SphereMesh_p3jek")
+
+[node name="BuildingUi" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("4_63bwa")]
+gridmap = NodePath("../Root3D/GridMap")

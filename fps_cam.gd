@@ -23,6 +23,8 @@ class ClickData:
 
 var _pivot := Vector3.ZERO
 var _preview_container: MeshInstance3D
+var _preview_offset: int = 0
+var _preview_offset_alt: int = 0
 
 @onready var building_ui := $"../../BuildingUi" as BuildingUi
 @onready var gridmap := $"../GridMap" as BuildingGrid
@@ -36,6 +38,14 @@ func _unhandled_input(event: InputEvent) -> void:
             click_pos += transform.basis.z * 0.1
             update_visualiser(click_pos)
         print(intersect_data)
+    elif event.is_action_pressed("increase_offset"):
+        _preview_offset += 1
+    elif event.is_action_pressed("decrease_offset"):
+        _preview_offset -= 1
+    elif event.is_action_pressed("increase_offset_alt"):
+        _preview_offset += 1
+    elif event.is_action_pressed("decrease_offset_alt"):
+        _preview_offset -= 1
 
 func _ready() -> void:
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -72,8 +82,19 @@ func _show_placement_preview() -> void:
             _show_preview_at_pos(coord)
 
 func _shift_pos_using_selected(normal: Vector3, pos: Vector3) -> Vector3:
-    pos += (normal * _preview_container.mesh.get_aabb().size / 2) + (normal.abs() * .1)
+    var rotated_normal := normal.rotated(Vector3(0, 1, 0), PI / 2)
+    if rotated_normal == normal:
+        rotated_normal = normal.rotated(Vector3(0, 0, 1), PI / 2)
+    var rotated_normal_abs := rotated_normal.abs()
+    var mesh_size := _preview_container.mesh.get_aabb().size
+    _clamp_preview_offset(rotated_normal_abs, mesh_size)
+    pos += (normal * mesh_size / 2) + (normal.abs() * .1)
+    pos += rotated_normal_abs * _preview_offset
     return pos
+
+func _clamp_preview_offset(rotated_normal_abs: Vector3, mesh_size: Vector3) -> void:
+    var max_offset := rotated_normal_abs.dot((mesh_size / 2).floor())
+    _preview_offset = clamp(_preview_offset, -max_offset + 1, max_offset)
 
 func _show_preview_at_pos(pos: Vector3) -> void:
     _preview_container.visible = true
@@ -107,4 +128,9 @@ func _on_building_ui_item_selected(id: int) -> void:
         mesh_node.material_override = material
         _preview_container = mesh_node
         _preview_container.visible = false
+        _preview_container.visibility_changed.connect(_reset_preview_offset)
         get_parent().add_child(_preview_container)
+
+func _reset_preview_offset():
+    _preview_offset = 0
+    _preview_offset_alt = 0

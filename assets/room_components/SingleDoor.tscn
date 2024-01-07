@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwvj2qjo0cnwi"]
+
+[ext_resource type="Material" uid="uid://rtk8sbe6m5uw" path="res://assets/dungeon_objects/Textures/red_triplanar.tres" id="1_rom04"]
+
+[node name="SingleDoor" type="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1.8, 0, 0, 0, 0.15, 0, 0, 0)
+material = ExtResource("1_rom04")

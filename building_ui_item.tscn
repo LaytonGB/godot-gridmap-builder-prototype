@@ -13,15 +13,20 @@ script = ExtResource("1_3lgv8")
 
 [node name="ItemContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 
 [node name="TextureRect" type="TextureRect" parent="ItemContainer"]
+visible = false
 layout_mode = 2
 texture = ExtResource("2_nfuym")
 
 [node name="Label" type="Label" parent="ItemContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_font_sizes/font_size = 12
 text = "Example Item With Long Name"
-text_overrun_behavior = 3
+autowrap_mode = 2
 
 [connection signal="selected" from="." to="." method="_on_selected"]

@@ -23,10 +23,11 @@ func _ready() -> void:
     mouse_entered.connect(_on_mouse_entered)
     mouse_exited.connect(_on_mouse_exited)
 
-func init(id: int, texture: Texture2D, label_text: String) -> void:
+func init(id: int, label_text: String, texture: Texture2D = null) -> void:
     self.id = id
-    texture_rect.texture = texture
     label.text = label_text
+    if texture:
+        texture_rect.texture = texture
 
 func _gui_input(event) -> void:
     if event is InputEventMouseButton and hovered:

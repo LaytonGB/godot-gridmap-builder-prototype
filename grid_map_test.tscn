@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://bv5unpvojacm"]
+[gd_scene load_steps=5 format=3 uid="uid://bv5unpvojacm"]
 
-[ext_resource type="PackedScene" uid="uid://b5oqk3iqcvr0i" path="res://grid_map.tscn" id="1_1jxdo"]
 [ext_resource type="MeshLibrary" uid="uid://brjsqliscr2bt" path="res://assets/meshes/mesh_lib.tres" id="2_eqkhv"]
 [ext_resource type="Script" path="res://Camera3D.gd" id="2_j8s3l"]
 
@@ -14,12 +13,10 @@ height = 0.2
 
 [node name="GridMapTest" type="Node3D"]
 
-[node name="GridMap" parent="." instance=ExtResource("1_1jxdo")]
+[node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("2_eqkhv")
 cell_size = Vector3(1, 1, 1)
 cell_center_y = false
-collision_layer = 1
-collision_mask = 1
 data = {
 "cells": PackedInt32Array(65535, 65535, 2, 0, 65535, 2, 0, 0, 2, 65535, 0, 2, 0, 1, 0, 65535, 1, 1, 1, 1, 3, 1, 0, 3, 1, 65535, 3, 65534, 65535, 4, 65534, 0, 4, 65534, 1, 4, 65533, 65535, 3, 65533, 0, 3, 65533, 1, 3)
 }

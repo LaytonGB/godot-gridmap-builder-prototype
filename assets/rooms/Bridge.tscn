@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://dktywwnxhvmq4"]
+
+[ext_resource type="Material" uid="uid://cnugcbtwqkinp" path="res://assets/dungeon_objects/Textures/gray_triplanar.tres" id="1_gdjeb"]
+[ext_resource type="Texture2D" uid="uid://cdvfkwcphf85v" path="res://assets/dungeon_objects/Textures/orange/texture_09.png" id="1_gpyt1"]
+[ext_resource type="Script" path="res://assets/rooms/bridge.gd" id="1_hj1x0"]
+[ext_resource type="Material" uid="uid://deqq0jukib0w8" path="res://assets/dungeon_objects/Textures/orange_triplanar.tres" id="3_1knhc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nc778"]
+albedo_texture = ExtResource("1_gpyt1")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sx86a"]
+size = Vector3(2, 2, 2)
+
+[node name="Bridge" type="CSGCombiner3D"]
+custom_aabb = AABB(0, 0, 0, 2, 2, 2)
+use_collision = true
+script = ExtResource("1_hj1x0")
+
+[node name="Floors" type="CSGCombiner3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Floors"]
+transform = Transform3D(2, 0, 0, 0, 0.1, 0, 0, 0, 2, 0, -0.95, 0)
+material = ExtResource("1_gdjeb")
+
+[node name="Walls" type="CSGCombiner3D" parent="."]
+
+[node name="WallX-" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(0.1, 0, 0, 0, 1.8, 0, 0, 0, 2, -0.95, 0, 0)
+material_override = SubResource("StandardMaterial3D_nc778")
+material = ExtResource("3_1knhc")
+
+[node name="WallX+" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(0.1, 0, 0, 0, 1.8, 0, 0, 0, 2, 0.95, 0, 0)
+material = ExtResource("3_1knhc")
+
+[node name="WallZ-" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(2, 0, 0, 0, 1.8, 0, 0, 0, 0.1, 0, 0, -0.95)
+material = ExtResource("3_1knhc")
+
+[node name="WallZ+" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(2, 0, 0, 0, 1.8, 0, 0, 0, 0.1, 0, 0, 0.95)
+material = ExtResource("3_1knhc")
+
+[node name="Ceilings" type="CSGCombiner3D" parent="."]
+
+[node name="Ceiling" type="CSGBox3D" parent="Ceilings"]
+transform = Transform3D(2, 0, 0, 0, 0.1, 0, 0, 0, 2, 0, 0.95, 0)
+material = ExtResource("1_gdjeb")
+
+[node name="OutlineArea" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="SimpleCollision" type="CollisionShape3D" parent="OutlineArea"]
+shape = SubResource("BoxShape3D_sx86a")

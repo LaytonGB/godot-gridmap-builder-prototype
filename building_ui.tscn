@@ -25,6 +25,7 @@ script = ExtResource("1_7fbl6")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_8dwy5")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]

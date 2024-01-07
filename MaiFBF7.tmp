@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=3 uid="uid://cjse6qhn7s30n"]
+[gd_scene load_steps=9 format=3 uid="uid://cjse6qhn7s30n"]
 
-[ext_resource type="Script" path="res://building_root.gd" id="1_3kkud"]
 [ext_resource type="Script" path="res://building_manager.gd" id="1_bx334"]
 [ext_resource type="Script" path="res://building_grid.gd" id="3_0jg1e"]
 [ext_resource type="Script" path="res://fps_cam.gd" id="3_g5ln3"]
@@ -8,12 +7,19 @@
 [ext_resource type="PackedScene" uid="uid://dsvnr5cxaqeh0" path="res://building_ui.tscn" id="4_63bwa"]
 [ext_resource type="Script" path="res://room_preview.gd" id="5_2tk83"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yix5x"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_p3jek"]
+material = SubResource("StandardMaterial3D_yix5x")
+radius = 0.1
+height = 0.2
+
 [node name="RootCanvas" type="CanvasLayer"]
-script = ExtResource("1_3kkud")
-_room_scenes = Array[PackedScene]([ExtResource("4_7sci3")])
 
 [node name="Root3D" type="Node3D" parent="."]
 script = ExtResource("1_bx334")
+_room_scenes = Array[PackedScene]([ExtResource("4_7sci3")])
 
 [node name="Camera3D" type="Camera3D" parent="Root3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50395, 4)
@@ -21,7 +27,11 @@ projection = 1
 current = true
 size = 10.0
 script = ExtResource("3_g5ln3")
-move_speed = 10
+move_speed = null
+move_sprint_multiplier = null
+floor_height = null
+camera_distance = null
+camera_target_height = null
 
 [node name="BuildingGrid" type="CSGCombiner3D" parent="Root3D"]
 use_collision = true
@@ -30,7 +40,7 @@ collision_mask = 3
 script = ExtResource("3_0jg1e")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Preview" type="StaticBody3D" parent="Root3D"]
+[node name="PreviewContainer" type="StaticBody3D" parent="Root3D"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("5_2tk83")
@@ -42,8 +52,12 @@ transform = Transform3D(-0.826649, -0.255215, 0.501515, 0, 0.891236, 0.453539, -
 transform = Transform3D(0.89715, 0.215944, -0.385343, 0, 0.87236, 0.488865, 0.441725, -0.438585, 0.782638, -5, 3, 4)
 light_energy = 0.3
 
-[node name="BuildingUi" parent="." node_paths=PackedStringArray("_building_grid") instance=ExtResource("4_63bwa")]
-offset_top = -32.0
-_building_grid = NodePath("../Root3D/BuildingGrid")
+[node name="ClickVisualiser" type="MeshInstance3D" parent="Root3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.40079)
+visible = false
+mesh = SubResource("SphereMesh_p3jek")
 
-[connection signal="visibility_changed" from="Root3D/Preview" to="Root3D/Preview" method="_on_visibility_changed"]
+[node name="BuildingUi" parent="." instance=ExtResource("4_63bwa")]
+offset_top = -32.0
+
+[connection signal="visibility_changed" from="Root3D/PreviewContainer" to="Root3D/PreviewContainer" method="_on_visibility_changed"]
